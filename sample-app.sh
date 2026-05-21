@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Limpieza total previa para evitar choques
+# Limpieza inicial
 docker stop samplerunning || true
 docker rm samplerunning || true
 rm -rf tempdir
@@ -13,9 +13,9 @@ cp sample_app.py tempdir/.
 cp -r templates/* tempdir/templates/.
 cp -r static/* tempdir/static/.
 
-# Aquí está corregido y limpio sin la comilla extra
-echo "FROM python:3.9-slim" > tempdir/Dockerfile
-echo "RUN pip install --no-cache-dir flask" >> tempdir/Dockerfile
+# Aquí apagamos las barras de progreso y bajamos a Python 3.8 que es aún más antiguo y seguro
+echo "FROM python:3.8-slim" > tempdir/Dockerfile
+echo "RUN pip install --no-cache-dir --quiet --disable-pip-version-check flask" >> tempdir/Dockerfile
 echo "COPY  ./static /home/myapp/static/" >> tempdir/Dockerfile
 echo "COPY  ./templates /home/myapp/templates/" >> tempdir/Dockerfile
 echo "COPY  sample_app.py /home/myapp/" >> tempdir/Dockerfile
